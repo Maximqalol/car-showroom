@@ -24,7 +24,8 @@ public class Producer {
     @Column(name = "phone_number", nullable = false)
     private String phone;
 
-    public Producer() {}
+    public Producer() {
+    }
 
     public Producer(String name, String address, String phone) {
         this.name = name;

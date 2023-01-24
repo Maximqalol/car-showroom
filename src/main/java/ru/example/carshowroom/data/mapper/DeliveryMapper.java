@@ -21,12 +21,12 @@ public interface DeliveryMapper {
     List<DeliveryDto> toListDto(List<Delivery> deliveries);
 
     @Named("setRequestId")
-        default Request setRequestId(Integer requestId) {
+    default Request setRequestId(Integer requestId) {
         if (requestId == null) {
             return null;
         }
         final var request = new Request();
         request.setId(requestId);
         return request;
-        }
+    }
 }

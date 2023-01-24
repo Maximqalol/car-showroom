@@ -37,8 +37,7 @@ public class CustomerController {
     public void deleteCustomer(@PathVariable Integer customerId) {
         if (customerService.getCustomerById(customerId) == null) {
             log.error("Can't delete customer with id = {}", customerId);
-        }
-        else {
+        } else {
             customerService.remove(customerId);
             log.info("Customer with id = {} was deleted.", customerId);
         }
@@ -49,8 +48,7 @@ public class CustomerController {
         List<CustomerDto> customerList = customerService.getCustomers();
         if (customerList.isEmpty()) {
             log.warn("List of customers is empty.");
-        }
-        else {
+        } else {
             log.info("Returned list of customers with size = {}.", customerList.size());
         }
         return customerList;

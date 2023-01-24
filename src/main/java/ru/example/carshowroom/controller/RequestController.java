@@ -39,8 +39,7 @@ public class RequestController {
     public void deleteRequest(@PathVariable Integer requestId) {
         if (requestService.getRequestById(requestId) == null) {
             log.error("Can't delete request with id = {}", requestId);
-        }
-        else {
+        } else {
             requestService.remove(requestId);
             log.info("Request with id = {} was deleted.", requestId);
         }

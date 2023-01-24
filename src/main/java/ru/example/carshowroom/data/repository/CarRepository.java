@@ -12,5 +12,6 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
 
     @Query(value = "select * from car where quantity > 0", nativeQuery = true)
     List<Car> findAvailableCars();
+
     Car findCarById(Integer carId);
 }

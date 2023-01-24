@@ -13,6 +13,7 @@ import java.util.List;
 public interface CarMapper {
     @Mapping(target = "producer", source = "producerId", qualifiedByName = "setProducerId")
     Car fromDto(CarDto carDto);
+
     @Mapping(target = "producerId", source = "producer.id")
     CarDto toDto(Car car);
 

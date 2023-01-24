@@ -62,9 +62,9 @@ public class CarControllerTest {
     @Test
     public void createCarTest() throws Exception {
         mockMvc.perform(post("/api/car")
-                .content(new ObjectMapper().writeValueAsString(new Car()))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                        .content(new ObjectMapper().writeValueAsString(new Car()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 }
