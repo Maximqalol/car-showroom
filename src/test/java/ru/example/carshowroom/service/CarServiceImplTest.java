@@ -15,6 +15,7 @@ import ru.example.carshowroom.data.repository.CarRepository;
 import ru.example.carshowroom.service.impl.CarServiceImpl;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,39 +38,64 @@ public class CarServiceImplTest {
     }
 
     @Test
-    public void createCarTest() {
-        Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer());
-        when(carRepository.save(car)).thenReturn(car);
-        CarDto carDto = new CarDto(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, 2);
+    public void when_carRepository_save_then_nothing() {
+        Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
+        CarDto carDto = new CarDto(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, 1);
         when(carMapper.fromDto(carDto)).thenReturn(car);
         when(carMapper.toDto(car)).thenReturn(carDto);
-        //assertEquals(car2, carMapper.toDto(car));
-        CarDto savedCar = carService.create(carDto);
-        assertThat(savedCar).isNotNull();
+        carService.create(carDto);
+        verify(carRepository).save(any(Car.class));
     }
 
     @Test
-    public void findCarTest() {
-        Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer());
+    public void when_carRepository_deleteById_then_nothing() {
+        Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
+        carService.remove(car.getId());
+        verify(carRepository).deleteById(anyInt());
+    }
+
+    @Test
+    public void when_carRepository_update_then_nothing() {
+        CarDto carDto = new CarDto(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, 1);
+        Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
+        when(carRepository.findById(carDto.getId())).thenReturn(Optional.of(car));
+        when(carMapper.fromDto(carDto)).thenReturn(car);
+        when(carMapper.toDto(car)).thenReturn(carDto);
+        carService.update(carDto);
+        verify(carRepository).save(any());
+    }
+
+    @Test
+    public void when_carRepository_findById_then_return_carDto() {
+        Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
         CarDto carDto = new CarDto(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, 1);
         when(carMapper.toDto(car)).thenReturn(carDto);
-        when(carRepository.findCarById(1337)).thenReturn(car);
+        when(carRepository.findById(1337)).thenReturn(Optional.of(car));
         CarDto carDto1 = carService.findCarById(1337);
         CarDto carDto2 = carService.findCarById(1338);
         assertEquals(carDto1.getId(), car.getId());
         assertThat(carDto2).isNull();
-        verify(carRepository, atLeastOnce()).findCarById(1337);
+        verify(carRepository, atLeastOnce()).findById(1337);
 
     }
 
     @Test
-    public void getAllCarsTest() {
-        Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer());
+    public void when_carRepository_findAll_then_return_carList() {
+        Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
         when(carRepository.findAll()).thenReturn(List.of(car, car, car));
-        when(carMapper.toListDto(List.of(car, car, car))).thenReturn(List.of(new CarDto(), new CarDto(), new CarDto()));
         List<CarDto> carList = carService.getAllCars();
-        assertEquals(3, carList.size());
         assertThat(carList).isNotNull();
+        assertEquals(3, carList.size());
         verify(carRepository, times(1)).findAll();
+    }
+
+    @Test
+    public void when_carRepository_findAvailableCars_then_return_carList() {
+        Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 1, new Producer(1, "Some name", "Some address", "Some phone"));
+        when(carRepository.findAvailableCars()).thenReturn(List.of(car, car, car));
+        List<CarDto> carList = carService.getAvailableCars();
+        assertThat(carList).isNotNull();
+        assertEquals(3, carList.size());
+        verify(carRepository, times(1)).findAvailableCars();
     }
 }
