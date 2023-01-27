@@ -28,29 +28,32 @@ public class CustomerController {
     }
 
     @PostMapping
-    public CustomerDto createCustomer(@RequestBody CustomerDto customerDto) {
-        log.info("Customer to create {}.", customerDto.toString());
-        return customerService.create(customerDto);
+    public void createCustomer(@RequestBody CustomerDto customerDto) {
+        log.info("Customer to create: {}.", customerDto.toString());
+        customerService.create(customerDto);
     }
 
     @DeleteMapping("/{customerId}")
     public void deleteCustomer(@PathVariable Integer customerId) {
-        if (customerService.getCustomerById(customerId) == null) {
-            log.error("Can't delete customer with id = {}", customerId);
-        } else {
-            customerService.remove(customerId);
-            log.info("Customer with id = {} was deleted.", customerId);
-        }
+        log.info("Remove customer with id = {}.", customerId);
+        customerService.remove(customerId);
+    }
+
+    @PutMapping("/{carId}")
+    public void updateCustomer(@RequestBody CustomerDto customerDto) {
+        log.info("Customer to update: {}.", customerDto.toString());
+        customerService.update(customerDto);
+    }
+
+    @GetMapping("/{customerId}")
+    public CustomerDto getCustomerById(@PathVariable Integer customerId) {
+        log.info("Return customer with id = {}.", customerId);
+        return customerService.getCustomerById(customerId);
     }
 
     @GetMapping("/all")
     public List<CustomerDto> getAllCustomers() {
-        List<CustomerDto> customerList = customerService.getCustomers();
-        if (customerList.isEmpty()) {
-            log.warn("List of customers is empty.");
-        } else {
-            log.info("Returned list of customers with size = {}.", customerList.size());
-        }
-        return customerList;
+        log.info("Return list of customers.");
+        return customerService.getCustomers();
     }
 }

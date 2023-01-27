@@ -27,7 +27,8 @@ public class Producer {
     public Producer() {
     }
 
-    public Producer(String name, String address, String phone) {
+    public Producer(Integer id, String name, String address, String phone) {
+        this.id = id;
         this.name = name;
         this.address = address;
         this.phone = phone;

@@ -29,42 +29,33 @@ public class RequestController {
     }
 
     @PostMapping
-    public RequestDto createRequest(@RequestBody RequestDto requestDto) {
-        log.info("Request to create {}.", requestDto.toString());
-        return requestService.create(requestDto);
+    public void createRequest(@RequestBody RequestDto requestDto) {
+        log.info("Request to create: {}.", requestDto.toString());
+        requestService.create(requestDto);
 
     }
 
     @DeleteMapping("/{requestId}")
     public void deleteRequest(@PathVariable Integer requestId) {
-        if (requestService.getRequestById(requestId) == null) {
-            log.error("Can't delete request with id = {}", requestId);
-        } else {
-            requestService.remove(requestId);
-            log.info("Request with id = {} was deleted.", requestId);
-        }
+        log.info("Request with id = {} was deleted.", requestId);
+        requestService.remove(requestId);
     }
 
-    @GetMapping("/all")
-    public List<RequestDto> getAllRequests() {
-        List<RequestDto> requestList = requestService.getRequests();
-        if (requestList.isEmpty()) {
-            log.warn("List of requests is empty.");
-        } else {
-            log.info("Returned list of requests with size = {}.", requestList.size());
-        }
-        return requestList;
+    @PutMapping
+    public void updateRequest(@RequestBody RequestDto requestDto) {
+        log.info("Request to update: {}", requestDto.toString());
+        requestService.update(requestDto);
     }
 
     @GetMapping("/{requestId}")
     public RequestDto getRequestById(@PathVariable Integer requestId) {
-        RequestDto requestDto = requestService.getRequestById(requestId);
-        if (requestDto != null) {
-            log.info("Founded request with id = {}.", requestDto.getId());
-            return requestDto;
-        } else {
-            log.error("Can't find request with id = {}", requestId);
-        }
-        return null;
+        log.info("Return request with id = {}.", requestId);
+        return requestService.getRequestById(requestId);
+    }
+
+    @GetMapping("/all")
+    public List<RequestDto> getAllRequests() {
+        log.info("Return list of requests.");
+        return requestService.getRequests();
     }
 }

@@ -13,6 +13,8 @@ import ru.example.carshowroom.service.IProducerService;
 
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ProducerServiceImpl implements IProducerService {
@@ -29,11 +31,11 @@ public class ProducerServiceImpl implements IProducerService {
     }
 
     @Override
-    public ProducerDto create(ProducerDto producerDto) {
+    public void create(ProducerDto producerDto) {
         log.debug("Mapping ProducerDto to Producer.");
         Producer producer = producerMapper.fromDto(producerDto);
-        log.debug("Saving and returning producer.");
-        return producerMapper.toDto(producerRepository.save(producer));
+        log.debug("Saving producer.");
+        producerMapper.toDto(producerRepository.save(producer));
     }
 
     @Override
@@ -42,13 +44,27 @@ public class ProducerServiceImpl implements IProducerService {
     }
 
     @Override
-    public List<ProducerDto> getProducers() {
-        return producerMapper.toListDto(producerRepository.findAll(Sort.by("name")));
+    public void update(ProducerDto producerDto) {
+        log.debug("Finding producer with id = {}.", producerDto.getId());
+        Producer producer = producerRepository.findById(producerDto.getId()).orElse(null);
+        final var producerBuilder = ProducerDto.Builder.aProducerDto()
+                .withId(Objects.requireNonNull(producer).getId())
+                .withName(producerDto.getName())
+                .withPhone(producerDto.getPhone())
+                .withAddress(producerDto.getAddress());
+        Producer updatingProducer = producerMapper.fromDto(producerBuilder.build());
+        log.debug("Updating producer.");
+        producerMapper.toDto(producerRepository.save(updatingProducer));
     }
 
     @Override
     public ProducerDto getProducerById(Integer producerId) {
         return producerMapper.toDto(producerRepository.findById(producerId).orElse(null));
+    }
+
+    @Override
+    public List<ProducerDto> getProducers() {
+        return producerRepository.findAll(Sort.by("name")).stream().map(producerMapper::toDto).collect(Collectors.toList());
     }
 
 }

@@ -11,11 +11,12 @@ import ru.example.carshowroom.data.repository.CarRepository;
 import ru.example.carshowroom.service.ICarService;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class CarServiceImpl implements ICarService {
     private final Logger log = LoggerFactory.getLogger(CarServiceImpl.class);
-
     private final CarRepository carRepository;
     private final CarMapper carMapper;
 
@@ -26,16 +27,34 @@ public class CarServiceImpl implements ICarService {
     }
 
     @Override
-    public CarDto create(CarDto carDto) {
+    public void create(CarDto carDto) {
         log.debug("Mapping CarDto to Car.");
         Car car = carMapper.fromDto(carDto);
-        log.debug("Saving and returning car.");
-        return carMapper.toDto(carRepository.save(car));
+        log.debug("Saving car.");
+        carMapper.toDto(carRepository.save(car));
     }
 
     @Override
     public CarDto findCarById(Integer carId) {
-        return carMapper.toDto(carRepository.findCarById(carId));
+        return carMapper.toDto(carRepository.findById(carId).orElse(null));
+    }
+
+    @Override
+    public void update(CarDto carDto) {
+        log.debug("Finding car with id = {}.", carDto.getId());
+        Car car = carRepository.findById(carDto.getId()).orElse(null);
+        final var carBuilder = CarDto.Builder.aCarDto()
+                .withId(Objects.requireNonNull(car).getId())
+                .withBrand(carDto.getBrand())
+                .withModel(carDto.getModel())
+                .withFeatures(carDto.getFeatures())
+                .withYear(carDto.getYear())
+                .withPrice(carDto.getPrice())
+                .withQuantity(carDto.getQuantity())
+                .withProducerId(carDto.getProducerId());
+        Car updatingCar = carMapper.fromDto(carBuilder.build());
+        log.debug("Updating car.");
+        carMapper.toDto(carRepository.save(updatingCar));
     }
 
     @Override
@@ -45,12 +64,12 @@ public class CarServiceImpl implements ICarService {
 
     @Override
     public List<CarDto> getAvailableCars() {
-        return carMapper.toListDto(carRepository.findAvailableCars());
+        return carRepository.findAvailableCars().stream().map(carMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
     public List<CarDto> getAllCars() {
-        return carMapper.toListDto(carRepository.findAll());
+        return carRepository.findAll().stream().map(carMapper::toDto).collect(Collectors.toList());
     }
 
 }

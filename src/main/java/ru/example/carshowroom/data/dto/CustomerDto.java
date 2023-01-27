@@ -85,4 +85,62 @@ public class CustomerDto {
                 ", email='" + email + '\'' +
                 '}';
     }
+
+
+    public static final class Builder {
+        private Integer id;
+        private String lastName;
+        private String firstName;
+        private String middleName;
+        private String phone;
+        private String email;
+
+        private Builder() {
+        }
+
+        public static Builder aCustomerDto() {
+            return new Builder();
+        }
+
+        public Builder withId(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withLastName(String lastName) {
+            this.lastName = lastName;
+            return this;
+        }
+
+        public Builder withFirstName(String firstName) {
+            this.firstName = firstName;
+            return this;
+        }
+
+        public Builder withMiddleName(String middleName) {
+            this.middleName = middleName;
+            return this;
+        }
+
+        public Builder withPhone(String phone) {
+            this.phone = phone;
+            return this;
+        }
+
+        public Builder withEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public CustomerDto build() {
+            CustomerDto customerDto = new CustomerDto();
+            customerDto.setId(id);
+            customerDto.setLastName(lastName);
+            customerDto.setFirstName(firstName);
+            customerDto.setMiddleName(middleName);
+            customerDto.setPhone(phone);
+            customerDto.setEmail(email);
+            return customerDto;
+        }
+    }
 }

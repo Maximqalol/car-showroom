@@ -61,4 +61,48 @@ public class ProducerDto {
                 ", phone='" + phone + '\'' +
                 '}';
     }
+
+
+    public static final class Builder {
+        private Integer id;
+        private String name;
+        private String address;
+        private String phone;
+
+        private Builder() {
+        }
+
+        public static Builder aProducerDto() {
+            return new Builder();
+        }
+
+        public Builder withId(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder withAddress(String address) {
+            this.address = address;
+            return this;
+        }
+
+        public Builder withPhone(String phone) {
+            this.phone = phone;
+            return this;
+        }
+
+        public ProducerDto build() {
+            ProducerDto producerDto = new ProducerDto();
+            producerDto.setId(id);
+            producerDto.setName(name);
+            producerDto.setAddress(address);
+            producerDto.setPhone(phone);
+            return producerDto;
+        }
+    }
 }

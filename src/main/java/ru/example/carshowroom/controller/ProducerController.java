@@ -29,29 +29,32 @@ public class ProducerController {
 
 
     @PostMapping
-    public ProducerDto createProducer(@RequestBody ProducerDto producerDto) {
-        log.info("Producer to create {}.", producerDto.toString());
-        return producerService.create(producerDto);
+    public void createProducer(@RequestBody ProducerDto producerDto) {
+        log.info("Producer to create: {}.", producerDto.toString());
+        producerService.create(producerDto);
     }
 
     @DeleteMapping("/{producerId}")
     public void deleteProducer(@PathVariable Integer producerId) {
-        if (producerService.getProducerById(producerId) == null) {
-            log.error("Can't delete producer with id = {}", producerId);
-        } else {
-            producerService.remove(producerId);
-            log.info("Producer with id = {} was deleted.", producerId);
-        }
+        log.info("Remove producer with id = {}.", producerId);
+        producerService.remove(producerId);
+    }
+
+    @PutMapping
+    public void updateProducer(@RequestBody ProducerDto producerDto) {
+        log.info("Producer to update: {}", producerDto);
+        producerService.update(producerDto);
+    }
+
+    @GetMapping("/{producerId}")
+    public ProducerDto getProducerById(@PathVariable Integer producerId) {
+        log.info("Return producer with id = {}.", producerId);
+        return producerService.getProducerById(producerId);
     }
 
     @GetMapping("/all")
     public List<ProducerDto> getAllProducers() {
-        List<ProducerDto> producerList = producerService.getProducers();
-        if (producerList.isEmpty()) {
-            log.warn("List of producers is empty.");
-        } else {
-            log.info("Returned list of producers with size = {}.", producerList.size());
-        }
-        return producerList;
+        log.info("Return list of producers.");
+        return producerService.getProducers();
     }
 }

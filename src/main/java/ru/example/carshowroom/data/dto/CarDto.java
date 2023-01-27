@@ -101,4 +101,76 @@ public class CarDto {
                 ", producerId=" + producerId +
                 '}';
     }
+
+
+    public static final class Builder {
+        private Integer id;
+        private String brand;
+        private String model;
+        private String features;
+        private Integer year;
+        private Integer price;
+        private Integer quantity;
+        private Integer producerId;
+
+        private Builder() {
+        }
+
+        public static Builder aCarDto() {
+            return new Builder();
+        }
+
+        public Builder withId(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withBrand(String brand) {
+            this.brand = brand;
+            return this;
+        }
+
+        public Builder withModel(String model) {
+            this.model = model;
+            return this;
+        }
+
+        public Builder withFeatures(String features) {
+            this.features = features;
+            return this;
+        }
+
+        public Builder withYear(Integer year) {
+            this.year = year;
+            return this;
+        }
+
+        public Builder withPrice(Integer price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder withQuantity(Integer quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public Builder withProducerId(Integer producerId) {
+            this.producerId = producerId;
+            return this;
+        }
+
+        public CarDto build() {
+            CarDto carDto = new CarDto();
+            carDto.setId(id);
+            carDto.setBrand(brand);
+            carDto.setModel(model);
+            carDto.setFeatures(features);
+            carDto.setYear(year);
+            carDto.setPrice(price);
+            carDto.setQuantity(quantity);
+            carDto.setProducerId(producerId);
+            return carDto;
+        }
+    }
 }

@@ -12,6 +12,8 @@ import ru.example.carshowroom.data.repository.CustomerRepository;
 import ru.example.carshowroom.service.ICustomerService;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements ICustomerService {
@@ -28,11 +30,11 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public CustomerDto create(CustomerDto customerDto) {
+    public void create(CustomerDto customerDto) {
         log.debug("Mapping CustomerDto to Customer.");
         Customer customer = customerMapper.fromDto(customerDto);
-        log.debug("Saving and returning customer.");
-        return customerMapper.toDto(customerRepository.save(customer));
+        log.debug("Saving customer.");
+        customerMapper.toDto(customerRepository.save(customer));
     }
 
     @Override
@@ -41,12 +43,28 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public List<CustomerDto> getCustomers() {
-        return customerMapper.toListDto(customerRepository.findAll(Sort.by("lastName")));
+    public void update(CustomerDto customerDto) {
+        log.debug("Finding customer with id = {}.", customerDto.getId());
+        Customer customer = customerRepository.findById(customerDto.getId()).orElse(null);
+        final var customerBuilder = CustomerDto.Builder.aCustomerDto()
+                .withId(Objects.requireNonNull(customer).getId())
+                .withLastName(customerDto.getLastName())
+                .withFirstName(customerDto.getFirstName())
+                .withMiddleName(customerDto.getMiddleName())
+                .withPhone(customerDto.getPhone())
+                .withEmail(customerDto.getEmail());
+        Customer updatingCustomer = customerMapper.fromDto(customerBuilder.build());
+        log.debug("Updating customer.");
+        customerMapper.toDto(customerRepository.save(updatingCustomer));
     }
 
     @Override
     public CustomerDto getCustomerById(Integer customerId) {
         return customerMapper.toDto(customerRepository.findById(customerId).orElse(null));
+    }
+
+    @Override
+    public List<CustomerDto> getCustomers() {
+        return customerRepository.findAll(Sort.by("lastName")).stream().map(customerMapper::toDto).collect(Collectors.toList());
     }
 }

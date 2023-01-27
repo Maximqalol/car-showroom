@@ -34,7 +34,8 @@ public class Customer {
 
     }
 
-    public Customer(String lastName, String firstName, String middleName, String phone, String email) {
+    public Customer(Integer id, String lastName, String firstName, String middleName, String phone, String email) {
+        this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.middleName = middleName;

@@ -28,53 +28,39 @@ public class CarController {
     }
 
     @PostMapping
-    public CarDto createCar(@RequestBody CarDto carDto) {
-        log.info("Car to create {}.", carDto.toString());
-        return carService.create(carDto);
+    public void createCar(@RequestBody CarDto carDto) {
+        log.info("Car to create: {}.", carDto.toString());
+        carService.create(carDto);
     }
 
     @DeleteMapping("/{carId}")
     public void deleteCar(@PathVariable Integer carId) {
-        if (carService.findCarById(carId) == null) {
-            log.error("Can't delete car with id = {}", carId);
-        } else {
-            carService.remove(carId);
-            log.info("Car with id = {} was deleted.", carId);
-        }
+        log.info("Remove car with id = {}.", carId);
+        carService.remove(carId);
+    }
+
+    @PutMapping
+    public void updateCar(@RequestBody CarDto carDto) {
+        log.info("Car to update: {}.", carDto.toString());
+        carService.update(carDto);
     }
 
     @GetMapping("/{carId}")
     public CarDto getCarById(@PathVariable Integer carId) {
-        CarDto carDto = carService.findCarById(carId);
-        if (carDto != null) {
-            log.info("Founded car with id = {} is {} {}.", carDto.getId(), carDto.getBrand(), carDto.getModel());
-            return carDto;
-        } else {
-            log.error("Can't find car with id = {}", carId);
-        }
-        return null;
+        log.info("Find car with id = {}.", carId);
+        return carService.findCarById(carId);
     }
 
     @GetMapping("/all")
     public List<CarDto> getAllCars() {
-        List<CarDto> carlist = carService.getAllCars();
-        if (carlist.isEmpty()) {
-            log.warn("List of cars is empty.");
-        } else {
-            log.info("Returned list of cars with size = {}.", carlist.size());
-        }
-        return carlist;
+        log.info("Return list of cars.");
+        return carService.getAllCars();
     }
 
     @GetMapping("/all/available")
     public List<CarDto> getAllAvailableCars() {
-        List<CarDto> carlist = carService.getAvailableCars();
-        if (carlist.isEmpty()) {
-            log.warn("List of cars is empty.");
-        } else {
-            log.info("Returned list of cars with size = {}.", carlist.size());
-        }
-        return carlist;
+        log.info("Return list of cars.");
+        return carService.getAvailableCars();
     }
 
 }

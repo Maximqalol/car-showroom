@@ -6,6 +6,4 @@ import ru.example.carshowroom.data.entity.Request;
 
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Integer> {
-
-    Request findRequestById(Integer requestId);
 }

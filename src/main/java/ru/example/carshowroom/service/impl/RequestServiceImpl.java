@@ -13,6 +13,8 @@ import ru.example.carshowroom.data.repository.RequestRepository;
 import ru.example.carshowroom.service.IRequestService;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class RequestServiceImpl implements IRequestService {
@@ -29,7 +31,7 @@ public class RequestServiceImpl implements IRequestService {
     }
 
     @Override
-    public RequestDto create(RequestDto requestDto) {
+    public void create(RequestDto requestDto) {
         log.debug("Finding car with id = {}.", requestDto.getCarId());
         Car car = carRepository.findById(requestDto.getCarId()).orElse(null);
         if (car != null && car.getQuantity() > 0) {
@@ -40,8 +42,8 @@ public class RequestServiceImpl implements IRequestService {
         }
         log.debug("Mapping RequestDto to Request");
         Request request = requestMapper.fromDto(requestDto);
-        log.debug("Saving and returning request.");
-        return requestMapper.toDto(requestRepository.save(request));
+        log.debug("Saving request.");
+        requestMapper.toDto(requestRepository.save(request));
     }
 
     @Override
@@ -50,12 +52,27 @@ public class RequestServiceImpl implements IRequestService {
     }
 
     @Override
+    public void update(RequestDto requestDto) {
+        log.debug("Finding request with id = {}.", requestDto.getId());
+        Request request = requestRepository.findById(requestDto.getId()).orElse(null);
+        final var requestBuilder = RequestDto.Builder.aRequestDto()
+                .withId(Objects.requireNonNull(request).getId())
+                .withDate(requestDto.getDate())
+                .withCarId(requestDto.getCarId())
+                .withCustomerId(requestDto.getCustomerId());
+        Request updatingRequest = requestMapper.fromDto(requestBuilder.build());
+        log.debug("Updating request.");
+        requestMapper.toDto(requestRepository.save(updatingRequest));
+    }
+
+    @Override
     public List<RequestDto> getRequests() {
-        return requestMapper.toListDto(requestRepository.findAll());
+        return requestRepository.findAll().stream().map(requestMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
     public RequestDto getRequestById(Integer requestId) {
-        return requestMapper.toDto(requestRepository.findRequestById(requestId));
+        return requestMapper.toDto(requestRepository.findById(requestId).orElse(null));
     }
+
 }

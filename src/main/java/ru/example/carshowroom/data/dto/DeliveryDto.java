@@ -59,4 +59,48 @@ public class DeliveryDto {
                 ", requestId=" + requestId +
                 '}';
     }
+
+
+    public static final class Builder {
+        private Integer id;
+        private String deliveryMethod;
+        private LocalDateTime dateOfDelivery;
+        private Integer requestId;
+
+        private Builder() {
+        }
+
+        public static Builder aDeliveryDto() {
+            return new Builder();
+        }
+
+        public Builder withId(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withDeliveryMethod(String deliveryMethod) {
+            this.deliveryMethod = deliveryMethod;
+            return this;
+        }
+
+        public Builder withDateOfDelivery(LocalDateTime dateOfDelivery) {
+            this.dateOfDelivery = dateOfDelivery;
+            return this;
+        }
+
+        public Builder withRequestId(Integer requestId) {
+            this.requestId = requestId;
+            return this;
+        }
+
+        public DeliveryDto build() {
+            DeliveryDto deliveryDto = new DeliveryDto();
+            deliveryDto.setId(id);
+            deliveryDto.setDeliveryMethod(deliveryMethod);
+            deliveryDto.setDateOfDelivery(dateOfDelivery);
+            deliveryDto.setRequestId(requestId);
+            return deliveryDto;
+        }
+    }
 }

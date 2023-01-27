@@ -59,4 +59,48 @@ public class RequestDto {
                 ", customerId=" + customerId +
                 '}';
     }
+
+
+    public static final class Builder {
+        private Integer id;
+        private LocalDateTime date;
+        private Integer carId;
+        private Integer customerId;
+
+        private Builder() {
+        }
+
+        public static Builder aRequestDto() {
+            return new Builder();
+        }
+
+        public Builder withId(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withDate(LocalDateTime date) {
+            this.date = date;
+            return this;
+        }
+
+        public Builder withCarId(Integer carId) {
+            this.carId = carId;
+            return this;
+        }
+
+        public Builder withCustomerId(Integer customerId) {
+            this.customerId = customerId;
+            return this;
+        }
+
+        public RequestDto build() {
+            RequestDto requestDto = new RequestDto();
+            requestDto.setId(id);
+            requestDto.setDate(date);
+            requestDto.setCarId(carId);
+            requestDto.setCustomerId(customerId);
+            return requestDto;
+        }
+    }
 }

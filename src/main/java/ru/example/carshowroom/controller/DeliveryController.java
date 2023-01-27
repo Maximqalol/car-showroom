@@ -27,54 +27,39 @@ public class DeliveryController {
     }
 
     @PostMapping
-    public DeliveryDto createDelivery(@RequestBody DeliveryDto deliveryDto) {
-        log.info("Delivery to create {}.", deliveryDto.toString());
-        return deliveryService.create(deliveryDto);
+    public void createDelivery(@RequestBody DeliveryDto deliveryDto) {
+        log.info("Delivery to create: {}.", deliveryDto.toString());
+        deliveryService.create(deliveryDto);
     }
 
 
     @DeleteMapping("/{deliveryId}")
     public void deleteDelivery(@PathVariable Integer deliveryId) {
-        if (deliveryService.getDeliveryById(deliveryId) == null) {
-            log.error("Can't delete delivery with id = {}", deliveryId);
-        } else {
-            deliveryService.remove(deliveryId);
-            log.info("Delivery with id = {} was deleted.", deliveryId);
-        }
+        log.info("Remove delivery with id = {}.", deliveryId);
+        deliveryService.remove(deliveryId);
+    }
+
+    @PutMapping
+    public void updateDelivery(@RequestBody DeliveryDto deliveryDto) {
+        log.info("Delivery to update: {}", deliveryDto.toString());
+        deliveryService.update(deliveryDto);
     }
 
     @GetMapping("/{deliveryId}")
     public DeliveryDto getDeliveryById(@PathVariable Integer deliveryId) {
-        DeliveryDto deliveryDto = deliveryService.getDeliveryById(deliveryId);
-        if (deliveryDto != null) {
-            log.info("Founded delivery with id = {} and requestId = {}.", deliveryDto.getId(), deliveryDto.getRequestId());
-            return deliveryDto;
-        } else {
-            log.error("Can't find delivery with id = {}", deliveryId);
-        }
-        return null;
+        log.info("Find delivery with id = {}.", deliveryId);
+        return deliveryService.getDeliveryById(deliveryId);
     }
 
     @GetMapping("/request/{requestId}")
     public DeliveryDto getDeliveryByRequest(@PathVariable Integer requestId) {
-        DeliveryDto deliveryDto = deliveryService.getDeliveryByRequest(requestId);
-        if (deliveryDto != null) {
-            log.info("Founded delivery with id = {} and requestId = {}.", deliveryDto.getId(), deliveryDto.getRequestId());
-            return deliveryDto;
-        } else {
-            log.error("Can't find delivery with requestId = {}", requestId);
-        }
-        return null;
+        log.info("Find delivery with requestId = {}.", requestId);
+        return deliveryService.getDeliveryByRequest(requestId);
     }
 
     @GetMapping("/all")
     public List<DeliveryDto> getAllDeliveries() {
-        List<DeliveryDto> deliveryList = deliveryService.getDeliveries();
-        if (deliveryList.isEmpty()) {
-            log.warn("List of deliveries is empty.");
-        } else {
-            log.info("Returned list of deliveries with size = {}.", deliveryList.size());
-        }
-        return deliveryList;
+        log.info("Return list of deliveries.");
+        return deliveryService.getDeliveries();
     }
 }
