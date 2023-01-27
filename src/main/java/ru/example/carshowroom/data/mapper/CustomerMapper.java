@@ -4,14 +4,11 @@ import org.mapstruct.Mapper;
 import ru.example.carshowroom.data.dto.CustomerDto;
 import ru.example.carshowroom.data.entity.Customer;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
 
     CustomerDto toDto(Customer customer);
 
-    Customer fromDto(CustomerDto dto);
+    Customer fromDto(CustomerDto customerDto);
 
-    List<CustomerDto> toListDto(List<Customer> customers);
 }

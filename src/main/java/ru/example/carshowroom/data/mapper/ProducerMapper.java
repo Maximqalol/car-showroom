@@ -4,8 +4,6 @@ import org.mapstruct.Mapper;
 import ru.example.carshowroom.data.dto.ProducerDto;
 import ru.example.carshowroom.data.entity.Producer;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring")
 public interface ProducerMapper {
 
@@ -13,5 +11,4 @@ public interface ProducerMapper {
 
     Producer fromDto(ProducerDto producerDto);
 
-    List<ProducerDto> toListDto(List<Producer> producers);
 }
