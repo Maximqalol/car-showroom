@@ -1,19 +1,19 @@
 package ru.example.carshowroom.service;
 
-import ru.example.carshowroom.data.dto.ProducerDto;
+import ru.example.carshowroom.data.entity.Producer;
 
 import java.util.List;
 
 public interface IProducerService {
 
-    void create(ProducerDto producerDto);
+    Producer create(Producer producer);
 
     void remove(Integer producerId);
 
-    void update(ProducerDto producerDto);
+    Producer update(Producer producer);
 
-    ProducerDto getProducerById(Integer producerId);
+    Producer getProducerById(Integer producerId);
 
-    List<ProducerDto> getProducers();
+    List<Producer> getProducers();
 
 }

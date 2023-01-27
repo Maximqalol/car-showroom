@@ -1,21 +1,21 @@
 package ru.example.carshowroom.service;
 
-import ru.example.carshowroom.data.dto.CarDto;
+import ru.example.carshowroom.data.entity.Car;
 
 import java.util.List;
 
 public interface ICarService {
 
-    void create(CarDto carDto);
+    Car create(Car car);
 
-    CarDto findCarById(Integer carId);
+    Car findCarById(Integer carId);
 
-    void update(CarDto carDto);
+    Car update(Car car);
 
     void remove(Integer carId);
 
-    List<CarDto> getAvailableCars();
+    List<Car> getAvailableCars();
 
-    List<CarDto> getAllCars();
+    List<Car> getAllCars();
 
 }

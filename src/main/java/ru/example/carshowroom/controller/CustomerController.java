@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.example.carshowroom.data.dto.CustomerDto;
+import ru.example.carshowroom.data.mapper.CustomerMapper;
 import ru.example.carshowroom.service.ICustomerService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -20,17 +22,20 @@ public class CustomerController {
 
     private static final Logger log = LoggerFactory.getLogger(CustomerController.class);
 
+    private final CustomerMapper customerMapper;
+
     private final ICustomerService customerService;
 
     @Autowired
-    public CustomerController(ICustomerService customerService) {
+    public CustomerController(CustomerMapper customerMapper, ICustomerService customerService) {
+        this.customerMapper = customerMapper;
         this.customerService = customerService;
     }
 
     @PostMapping
     public void createCustomer(@RequestBody CustomerDto customerDto) {
         log.info("Customer to create: {}.", customerDto.toString());
-        customerService.create(customerDto);
+        customerService.create(customerMapper.fromDto(customerDto));
     }
 
     @DeleteMapping("/{customerId}")
@@ -42,18 +47,18 @@ public class CustomerController {
     @PutMapping("/{carId}")
     public void updateCustomer(@RequestBody CustomerDto customerDto) {
         log.info("Customer to update: {}.", customerDto.toString());
-        customerService.update(customerDto);
+        customerService.update(customerMapper.fromDto(customerDto));
     }
 
     @GetMapping("/{customerId}")
     public CustomerDto getCustomerById(@PathVariable Integer customerId) {
         log.info("Return customer with id = {}.", customerId);
-        return customerService.getCustomerById(customerId);
+        return customerMapper.toDto(customerService.getCustomerById(customerId));
     }
 
     @GetMapping("/all")
     public List<CustomerDto> getAllCustomers() {
         log.info("Return list of customers.");
-        return customerService.getCustomers();
+        return customerService.getCustomers().stream().map(customerMapper::toDto).collect(Collectors.toList());
     }
 }

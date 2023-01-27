@@ -1,6 +1,7 @@
 package ru.example.carshowroom.data.dto;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class DeliveryDto {
     private Integer id;
@@ -60,47 +61,19 @@ public class DeliveryDto {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DeliveryDto that = (DeliveryDto) o;
+        return id.equals(that.id) &&
+                deliveryMethod.equals(that.deliveryMethod) &&
+                dateOfDelivery.equals(that.dateOfDelivery) &&
+                requestId.equals(that.requestId);
+    }
 
-    public static final class Builder {
-        private Integer id;
-        private String deliveryMethod;
-        private LocalDateTime dateOfDelivery;
-        private Integer requestId;
-
-        private Builder() {
-        }
-
-        public static Builder aDeliveryDto() {
-            return new Builder();
-        }
-
-        public Builder withId(Integer id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder withDeliveryMethod(String deliveryMethod) {
-            this.deliveryMethod = deliveryMethod;
-            return this;
-        }
-
-        public Builder withDateOfDelivery(LocalDateTime dateOfDelivery) {
-            this.dateOfDelivery = dateOfDelivery;
-            return this;
-        }
-
-        public Builder withRequestId(Integer requestId) {
-            this.requestId = requestId;
-            return this;
-        }
-
-        public DeliveryDto build() {
-            DeliveryDto deliveryDto = new DeliveryDto();
-            deliveryDto.setId(id);
-            deliveryDto.setDeliveryMethod(deliveryMethod);
-            deliveryDto.setDateOfDelivery(dateOfDelivery);
-            deliveryDto.setRequestId(requestId);
-            return deliveryDto;
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, deliveryMethod, dateOfDelivery, requestId);
     }
 }

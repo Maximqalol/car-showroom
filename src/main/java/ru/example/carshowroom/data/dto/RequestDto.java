@@ -1,6 +1,7 @@
 package ru.example.carshowroom.data.dto;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class RequestDto {
     private Integer id;
@@ -60,47 +61,19 @@ public class RequestDto {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RequestDto that = (RequestDto) o;
+        return id.equals(that.id) &&
+                date.equals(that.date) &&
+                carId.equals(that.carId) &&
+                customerId.equals(that.customerId);
+    }
 
-    public static final class Builder {
-        private Integer id;
-        private LocalDateTime date;
-        private Integer carId;
-        private Integer customerId;
-
-        private Builder() {
-        }
-
-        public static Builder aRequestDto() {
-            return new Builder();
-        }
-
-        public Builder withId(Integer id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder withDate(LocalDateTime date) {
-            this.date = date;
-            return this;
-        }
-
-        public Builder withCarId(Integer carId) {
-            this.carId = carId;
-            return this;
-        }
-
-        public Builder withCustomerId(Integer customerId) {
-            this.customerId = customerId;
-            return this;
-        }
-
-        public RequestDto build() {
-            RequestDto requestDto = new RequestDto();
-            requestDto.setId(id);
-            requestDto.setDate(date);
-            requestDto.setCarId(carId);
-            requestDto.setCustomerId(customerId);
-            return requestDto;
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, date, carId, customerId);
     }
 }

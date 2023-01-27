@@ -1,21 +1,21 @@
 package ru.example.carshowroom.service;
 
-import ru.example.carshowroom.data.dto.DeliveryDto;
+import ru.example.carshowroom.data.entity.Delivery;
 
 import java.util.List;
 
 public interface IDeliveryService {
 
-    void create(DeliveryDto deliveryDto);
+    Delivery create(Delivery delivery);
 
     void remove(Integer deliveryId);
 
-    void update(DeliveryDto deliveryDto);
+    Delivery update(Delivery delivery);
 
-    DeliveryDto getDeliveryByRequest(Integer requestId);
+    Delivery getDeliveryByRequest(Integer requestId);
 
-    DeliveryDto getDeliveryById(Integer deliveryId);
+    Delivery getDeliveryById(Integer deliveryId);
 
-    List<DeliveryDto> getDeliveries();
+    List<Delivery> getDeliveries();
 
 }

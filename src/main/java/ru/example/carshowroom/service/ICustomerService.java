@@ -1,19 +1,19 @@
 package ru.example.carshowroom.service;
 
-import ru.example.carshowroom.data.dto.CustomerDto;
+import ru.example.carshowroom.data.entity.Customer;
 
 import java.util.List;
 
 public interface ICustomerService {
 
-    void create(CustomerDto customerDto);
+    Customer create(Customer customer);
 
     void remove(Integer customerId);
 
-    void update(CustomerDto customerDto);
+    Customer update(Customer customer);
 
-    CustomerDto getCustomerById(Integer customerId);
+    Customer getCustomerById(Integer customerId);
 
-    List<CustomerDto> getCustomers();
+    List<Customer> getCustomers();
 
 }

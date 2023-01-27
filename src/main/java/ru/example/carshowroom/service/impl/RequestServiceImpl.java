@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.example.carshowroom.data.dto.RequestDto;
 import ru.example.carshowroom.data.entity.Car;
 import ru.example.carshowroom.data.entity.Request;
 import ru.example.carshowroom.data.mapper.RequestMapper;
@@ -12,9 +11,8 @@ import ru.example.carshowroom.data.repository.CarRepository;
 import ru.example.carshowroom.data.repository.RequestRepository;
 import ru.example.carshowroom.service.IRequestService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class RequestServiceImpl implements IRequestService {
@@ -31,48 +29,47 @@ public class RequestServiceImpl implements IRequestService {
     }
 
     @Override
-    public void create(RequestDto requestDto) {
-        log.debug("Finding car with id = {}.", requestDto.getCarId());
-        Car car = carRepository.findById(requestDto.getCarId()).orElse(null);
+    public Request create(Request request) {
+        log.debug("Find car with id = {}.", request.getCar().getId());
+        Car car = carRepository.findById(request.getCar().getId()).orElseThrow(() -> new EntityNotFoundException("Can't find car with id = " + request.getCar().getId()));
         if (car != null && car.getQuantity() > 0) {
-            log.debug("Setting car's quantity");
+            log.debug("Set car quantity");
             car.setQuantity(car.getQuantity() - 1);
-            log.debug("Saving car with quantity = {}.", car.getQuantity());
+            log.debug("Save car");
             carRepository.save(car);
         }
-        log.debug("Mapping RequestDto to Request");
-        Request request = requestMapper.fromDto(requestDto);
-        log.debug("Saving request.");
-        requestMapper.toDto(requestRepository.save(request));
+        log.debug("Save request.");
+        return requestRepository.save(request);
     }
 
     @Override
     public void remove(Integer requestId) {
+        log.debug("Delete request with id = {}.", requestId);
         requestRepository.deleteById(requestId);
     }
 
     @Override
-    public void update(RequestDto requestDto) {
-        log.debug("Finding request with id = {}.", requestDto.getId());
-        Request request = requestRepository.findById(requestDto.getId()).orElse(null);
-        final var requestBuilder = RequestDto.Builder.aRequestDto()
-                .withId(Objects.requireNonNull(request).getId())
-                .withDate(requestDto.getDate())
-                .withCarId(requestDto.getCarId())
-                .withCustomerId(requestDto.getCustomerId());
-        Request updatingRequest = requestMapper.fromDto(requestBuilder.build());
-        log.debug("Updating request.");
-        requestMapper.toDto(requestRepository.save(updatingRequest));
+    public Request update(Request request) {
+        log.debug("Finding request with id = {}.", request.getId());
+        Request updatingRequest = requestRepository.findById(request.getId()).orElseThrow(() -> new EntityNotFoundException("Can't find request with id = " + request.getId()));
+        updatingRequest.setId(request.getId());
+        updatingRequest.setDate(request.getDate());
+        updatingRequest.setCar(request.getCar());
+        updatingRequest.setCustomer(request.getCustomer());
+        log.debug("Update request.");
+        return requestRepository.save(updatingRequest);
     }
 
     @Override
-    public List<RequestDto> getRequests() {
-        return requestRepository.findAll().stream().map(requestMapper::toDto).collect(Collectors.toList());
+    public Request getRequestById(Integer requestId) {
+        log.debug("Find request by id = {}.", requestId);
+        return requestRepository.findById(requestId).orElseThrow(() -> new EntityNotFoundException("Can't find request with id = " + requestId));
     }
 
     @Override
-    public RequestDto getRequestById(Integer requestId) {
-        return requestMapper.toDto(requestRepository.findById(requestId).orElse(null));
+    public List<Request> getRequests() {
+        log.debug("Find all requests.");
+        return requestRepository.findAll();
     }
 
 }

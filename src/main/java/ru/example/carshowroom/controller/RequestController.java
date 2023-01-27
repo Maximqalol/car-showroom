@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.example.carshowroom.data.dto.RequestDto;
+import ru.example.carshowroom.data.mapper.RequestMapper;
 import ru.example.carshowroom.service.IRequestService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -19,19 +21,19 @@ import java.util.List;
 public class RequestController {
 
     private final Logger log = LoggerFactory.getLogger(RequestController.class);
-
-    @Autowired
+    private RequestMapper requestMapper;
     private IRequestService requestService;
 
     @Autowired
-    public RequestController(IRequestService requestService) {
+    public RequestController(RequestMapper requestMapper, IRequestService requestService) {
+        this.requestMapper = requestMapper;
         this.requestService = requestService;
     }
 
     @PostMapping
     public void createRequest(@RequestBody RequestDto requestDto) {
         log.info("Request to create: {}.", requestDto.toString());
-        requestService.create(requestDto);
+        requestService.create(requestMapper.fromDto(requestDto));
 
     }
 
@@ -44,18 +46,18 @@ public class RequestController {
     @PutMapping
     public void updateRequest(@RequestBody RequestDto requestDto) {
         log.info("Request to update: {}", requestDto.toString());
-        requestService.update(requestDto);
+        requestService.update(requestMapper.fromDto(requestDto));
     }
 
     @GetMapping("/{requestId}")
     public RequestDto getRequestById(@PathVariable Integer requestId) {
         log.info("Return request with id = {}.", requestId);
-        return requestService.getRequestById(requestId);
+        return requestMapper.toDto(requestService.getRequestById(requestId));
     }
 
     @GetMapping("/all")
     public List<RequestDto> getAllRequests() {
         log.info("Return list of requests.");
-        return requestService.getRequests();
+        return requestService.getRequests().stream().map(requestMapper::toDto).collect(Collectors.toList());
     }
 }

@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.example.carshowroom.data.dto.ProducerDto;
+import ru.example.carshowroom.data.mapper.ProducerMapper;
 import ru.example.carshowroom.service.IProducerService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -19,11 +21,12 @@ import java.util.List;
 public class ProducerController {
 
     private final Logger log = LoggerFactory.getLogger(ProducerController.class);
-
+    private final ProducerMapper producerMapper;
     private final IProducerService producerService;
 
     @Autowired
-    public ProducerController(IProducerService producerService) {
+    public ProducerController(ProducerMapper producerMapper, IProducerService producerService) {
+        this.producerMapper = producerMapper;
         this.producerService = producerService;
     }
 
@@ -31,7 +34,7 @@ public class ProducerController {
     @PostMapping
     public void createProducer(@RequestBody ProducerDto producerDto) {
         log.info("Producer to create: {}.", producerDto.toString());
-        producerService.create(producerDto);
+        producerService.create(producerMapper.fromDto(producerDto));
     }
 
     @DeleteMapping("/{producerId}")
@@ -43,18 +46,18 @@ public class ProducerController {
     @PutMapping
     public void updateProducer(@RequestBody ProducerDto producerDto) {
         log.info("Producer to update: {}", producerDto);
-        producerService.update(producerDto);
+        producerService.update(producerMapper.fromDto(producerDto));
     }
 
     @GetMapping("/{producerId}")
     public ProducerDto getProducerById(@PathVariable Integer producerId) {
         log.info("Return producer with id = {}.", producerId);
-        return producerService.getProducerById(producerId);
+        return producerMapper.toDto(producerService.getProducerById(producerId));
     }
 
     @GetMapping("/all")
     public List<ProducerDto> getAllProducers() {
         log.info("Return list of producers.");
-        return producerService.getProducers();
+        return producerService.getProducers().stream().map(producerMapper::toDto).collect(Collectors.toList());
     }
 }

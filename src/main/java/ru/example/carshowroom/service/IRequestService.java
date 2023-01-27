@@ -1,19 +1,19 @@
 package ru.example.carshowroom.service;
 
-import ru.example.carshowroom.data.dto.RequestDto;
+import ru.example.carshowroom.data.entity.Request;
 
 import java.util.List;
 
 public interface IRequestService {
 
-    void create(RequestDto requestDto);
+    Request create(Request request);
 
     void remove(Integer requestId);
 
-    void update(RequestDto requestDto);
+    Request update(Request request);
 
-    List<RequestDto> getRequests();
+    List<Request> getRequests();
 
-    RequestDto getRequestById(Integer requestId);
+    Request getRequestById(Integer requestId);
 
 }

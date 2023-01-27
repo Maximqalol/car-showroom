@@ -5,16 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.example.carshowroom.data.dto.ProducerDto;
 import ru.example.carshowroom.data.entity.Producer;
 import ru.example.carshowroom.data.mapper.ProducerMapper;
 import ru.example.carshowroom.data.repository.ProducerRepository;
 import ru.example.carshowroom.service.IProducerService;
 
-
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class ProducerServiceImpl implements IProducerService {
@@ -31,40 +28,39 @@ public class ProducerServiceImpl implements IProducerService {
     }
 
     @Override
-    public void create(ProducerDto producerDto) {
-        log.debug("Mapping ProducerDto to Producer.");
-        Producer producer = producerMapper.fromDto(producerDto);
-        log.debug("Saving producer.");
-        producerMapper.toDto(producerRepository.save(producer));
+    public Producer create(Producer producer) {
+        log.debug("Save producer");
+        return producerRepository.save(producer);
     }
 
     @Override
     public void remove(Integer producerId) {
+        log.debug("Delete producer with id = {}.", producerId);
         producerRepository.deleteById(producerId);
     }
 
     @Override
-    public void update(ProducerDto producerDto) {
-        log.debug("Finding producer with id = {}.", producerDto.getId());
-        Producer producer = producerRepository.findById(producerDto.getId()).orElse(null);
-        final var producerBuilder = ProducerDto.Builder.aProducerDto()
-                .withId(Objects.requireNonNull(producer).getId())
-                .withName(producerDto.getName())
-                .withPhone(producerDto.getPhone())
-                .withAddress(producerDto.getAddress());
-        Producer updatingProducer = producerMapper.fromDto(producerBuilder.build());
-        log.debug("Updating producer.");
-        producerMapper.toDto(producerRepository.save(updatingProducer));
+    public Producer update(Producer producer) {
+        log.debug("Find producer with id = {}.", producer.getId());
+        Producer updatingProducer = producerRepository.findById(producer.getId()).orElseThrow(() -> new EntityNotFoundException("Can`t find producer with id = " + producer.getId()));
+        updatingProducer.setId(producer.getId());
+        updatingProducer.setName(producer.getName());
+        updatingProducer.setPhone(producer.getPhone());
+        updatingProducer.setAddress(producer.getAddress());
+        log.debug("Update producer.");
+        return producerRepository.save(updatingProducer);
     }
 
     @Override
-    public ProducerDto getProducerById(Integer producerId) {
-        return producerMapper.toDto(producerRepository.findById(producerId).orElse(null));
+    public Producer getProducerById(Integer producerId) {
+        log.debug("Find producer by id = {}.", producerId);
+        return producerRepository.findById(producerId).orElseThrow(() -> new EntityNotFoundException("Can`t find producer with id = " + producerId));
     }
 
     @Override
-    public List<ProducerDto> getProducers() {
-        return producerRepository.findAll(Sort.by("name")).stream().map(producerMapper::toDto).collect(Collectors.toList());
+    public List<Producer> getProducers() {
+        log.debug("Find all producers.");
+        return producerRepository.findAll(Sort.by("name"));
     }
 
 }
