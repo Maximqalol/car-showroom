@@ -35,7 +35,7 @@ public class CarController {
     @PostMapping
     public void createCar(@RequestBody CarDto carDto) {
         log.info("Car to create: {}.", carDto.toString());
-        carService.create(carMapper.fromDto(carDto));
+        carService.save(carMapper.fromDto(carDto));
     }
 
     @DeleteMapping("/{carId}")
@@ -47,7 +47,7 @@ public class CarController {
     @PutMapping("/{carId}")
     public void updateCar(@RequestBody CarDto carDto) {
         log.info("Car to update: {}.", carDto.toString());
-        carService.update(carMapper.fromDto(carDto));
+        carService.save(carMapper.fromDto(carDto));
     }
 
     @GetMapping("/{carId}")

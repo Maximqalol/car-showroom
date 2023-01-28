@@ -6,11 +6,9 @@ import java.util.List;
 
 public interface ICustomerService {
 
-    Customer create(Customer customer);
+    Customer save(Customer customer);
 
     void remove(Integer customerId);
-
-    Customer update(Customer customer);
 
     Customer getCustomerById(Integer customerId);
 

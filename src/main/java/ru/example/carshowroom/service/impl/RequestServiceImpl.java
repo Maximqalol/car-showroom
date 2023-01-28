@@ -26,7 +26,7 @@ public class RequestServiceImpl implements IRequestService {
     }
 
     @Override
-    public Request create(Request request) {
+    public Request save(Request request) {
         log.debug("Find car with id = {}.", request.getCar().getId());
         Car car = carRepository.findById(request.getCar().getId()).orElseThrow(() -> new EntityNotFoundException("Can't find car with id = " + request.getCar().getId()));
         if (car != null && car.getQuantity() > 0) {
@@ -41,18 +41,6 @@ public class RequestServiceImpl implements IRequestService {
     public void remove(Integer requestId) {
         log.debug("Delete request with id = {}.", requestId);
         requestRepository.deleteById(requestId);
-    }
-
-    @Override
-    public Request update(Request request) {
-        log.debug("Find request with id = {}.", request.getId());
-        Request updatingRequest = requestRepository.findById(request.getId()).orElseThrow(() -> new EntityNotFoundException("Can't find request with id = " + request.getId()));
-        updatingRequest.setId(request.getId());
-        updatingRequest.setDate(request.getDate());
-        updatingRequest.setCar(request.getCar());
-        updatingRequest.setCustomer(request.getCustomer());
-        log.debug("Update request.");
-        return requestRepository.save(updatingRequest);
     }
 
     @Override

@@ -6,11 +6,9 @@ import java.util.List;
 
 public interface IDeliveryService {
 
-    Delivery create(Delivery delivery);
+    Delivery save(Delivery delivery);
 
     void remove(Integer deliveryId);
-
-    Delivery update(Delivery delivery);
 
     Delivery getDeliveryByRequest(Integer requestId);
 

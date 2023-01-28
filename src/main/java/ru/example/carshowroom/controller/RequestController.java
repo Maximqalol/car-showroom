@@ -33,7 +33,7 @@ public class RequestController {
     @PostMapping
     public void createRequest(@RequestBody RequestDto requestDto) {
         log.info("Request to create: {}.", requestDto.toString());
-        requestService.create(requestMapper.fromDto(requestDto));
+        requestService.save(requestMapper.fromDto(requestDto));
 
     }
 
@@ -41,12 +41,6 @@ public class RequestController {
     public void deleteRequest(@PathVariable Integer requestId) {
         log.info("Request with id = {} was deleted.", requestId);
         requestService.remove(requestId);
-    }
-
-    @PutMapping("/{requestId}")
-    public void updateRequest(@RequestBody RequestDto requestDto) {
-        log.info("Request to update: {}", requestDto.toString());
-        requestService.update(requestMapper.fromDto(requestDto));
     }
 
     @GetMapping("/{requestId}")

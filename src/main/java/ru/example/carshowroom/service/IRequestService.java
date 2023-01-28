@@ -6,11 +6,9 @@ import java.util.List;
 
 public interface IRequestService {
 
-    Request create(Request request);
+    Request save(Request request);
 
     void remove(Integer requestId);
-
-    Request update(Request request);
 
     List<Request> getRequests();
 

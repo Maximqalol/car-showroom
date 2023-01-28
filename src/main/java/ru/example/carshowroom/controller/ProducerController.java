@@ -34,7 +34,7 @@ public class ProducerController {
     @PostMapping
     public void createProducer(@RequestBody ProducerDto producerDto) {
         log.info("Producer to create: {}.", producerDto.toString());
-        producerService.create(producerMapper.fromDto(producerDto));
+        producerService.save(producerMapper.fromDto(producerDto));
     }
 
     @DeleteMapping("/{producerId}")
@@ -46,7 +46,7 @@ public class ProducerController {
     @PutMapping("/{producerId}")
     public void updateProducer(@RequestBody ProducerDto producerDto) {
         log.info("Producer to update: {}", producerDto);
-        producerService.update(producerMapper.fromDto(producerDto));
+        producerService.save(producerMapper.fromDto(producerDto));
     }
 
     @GetMapping("/{producerId}")

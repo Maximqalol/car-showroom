@@ -22,25 +22,9 @@ public class CarServiceImpl implements ICarService {
     }
 
     @Override
-    public Car create(Car car) {
+    public Car save(Car car) {
         log.debug("Save car.");
         return carRepository.save(car);
-    }
-
-    @Override
-    public Car update(Car car) {
-        log.debug("Find car by id = {}.", car.getId());
-        Car updatingCar = carRepository.findById(car.getId()).orElseThrow(() -> new EntityNotFoundException("Can't find car with id = " + car.getId()));
-        updatingCar.setId(car.getId());
-        updatingCar.setBrand(car.getModel());
-        updatingCar.setModel(car.getModel());
-        updatingCar.setFeature(car.getFeatures());
-        updatingCar.setYear(car.getYear());
-        updatingCar.setPrice(car.getPrice());
-        updatingCar.setQuantity(car.getQuantity());
-        updatingCar.setProducer(car.getProducer());
-        log.debug("Update car.");
-        return carRepository.save(updatingCar);
     }
 
     @Override

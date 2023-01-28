@@ -25,7 +25,7 @@ public class DeliveryServiceImpl implements IDeliveryService {
 
 
     @Override
-    public Delivery create(Delivery delivery) {
+    public Delivery save(Delivery delivery) {
         log.debug("Save delivery.");
         return deliveryRepository.save(delivery);
     }
@@ -34,18 +34,6 @@ public class DeliveryServiceImpl implements IDeliveryService {
     public void remove(Integer deliveryId) {
         log.debug("Delete delivery with id = {}.", deliveryId);
         deliveryRepository.deleteById(deliveryId);
-    }
-
-    @Override
-    public Delivery update(Delivery delivery) {
-        log.debug("Find delivery by id = {}.", delivery.getId());
-        Delivery updatingDelivery = deliveryRepository.findById(delivery.getId()).orElseThrow(() -> new EntityNotFoundException("Can't find delivery with id = " + delivery.getId()));
-        updatingDelivery.setId(delivery.getId());
-        updatingDelivery.setDeliveryMethod(delivery.getDeliveryMethod());
-        updatingDelivery.setDateOfDelivery(delivery.getDateOfDelivery());
-        updatingDelivery.setRequest(delivery.getRequest());
-        log.debug("Update delivery.");
-        return deliveryRepository.save(updatingDelivery);
     }
 
     @Override

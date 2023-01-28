@@ -10,11 +10,13 @@ import ru.example.carshowroom.data.entity.Producer;
 import ru.example.carshowroom.data.repository.CarRepository;
 import ru.example.carshowroom.service.impl.CarServiceImpl;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +31,7 @@ public class CarServiceImplTest {
     @Test
     public void givenNewCar_whenCreate_thenSaved() {
         Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
-        carService.create(car);
+        carService.save(car);
         verify(carRepository).save(car);
     }
 
@@ -43,19 +45,25 @@ public class CarServiceImplTest {
     @Test
     public void givenCar_whenUpdate_thenUpdated() {
         Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
-        when(carRepository.findById(car.getId())).thenReturn(Optional.of(car));
-        carService.update(car);
+        carService.save(car);
         verify(carRepository).save(car);
     }
 
     @Test
-    public void givenCar_whenFindById_thenCarFound() {
+    public void givenExistingCar_whenFindById_thenCarFound() {
         Optional<Car> expected = Optional.of(new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone")));
         when(carRepository.findById(1337)).thenReturn(expected);
         Car actual = carService.findCarById(1337);
         assertEquals(expected.get(), actual);
         verify(carRepository, atLeastOnce()).findById(1337);
+    }
 
+    @Test
+    public void givenCar_whenFindById_thenEntityNotFoundException() {
+        when(carRepository.findById(1337)).thenReturn(Optional.empty());
+        Exception exception = assertThrows(EntityNotFoundException.class, () -> carService.findCarById(1337));
+
+        assertEquals("Can't find car with id = 1337", exception.getMessage());
     }
 
     @Test

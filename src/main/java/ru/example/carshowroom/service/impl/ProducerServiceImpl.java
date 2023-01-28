@@ -25,7 +25,7 @@ public class ProducerServiceImpl implements IProducerService {
     }
 
     @Override
-    public Producer create(Producer producer) {
+    public Producer save(Producer producer) {
         log.debug("Save producer");
         return producerRepository.save(producer);
     }
@@ -37,21 +37,9 @@ public class ProducerServiceImpl implements IProducerService {
     }
 
     @Override
-    public Producer update(Producer producer) {
-        log.debug("Find producer with id = {}.", producer.getId());
-        Producer updatingProducer = producerRepository.findById(producer.getId()).orElseThrow(() -> new EntityNotFoundException("Can`t find producer with id = " + producer.getId()));
-        updatingProducer.setId(producer.getId());
-        updatingProducer.setName(producer.getName());
-        updatingProducer.setPhone(producer.getPhone());
-        updatingProducer.setAddress(producer.getAddress());
-        log.debug("Update producer.");
-        return producerRepository.save(updatingProducer);
-    }
-
-    @Override
     public Producer getProducerById(Integer producerId) {
         log.debug("Find producer by id = {}.", producerId);
-        return producerRepository.findById(producerId).orElseThrow(() -> new EntityNotFoundException("Can`t find producer with id = " + producerId));
+        return producerRepository.findById(producerId).orElseThrow(() -> new EntityNotFoundException("Can't find producer with id = " + producerId));
     }
 
     @Override

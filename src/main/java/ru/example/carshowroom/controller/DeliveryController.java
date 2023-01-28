@@ -34,7 +34,7 @@ public class DeliveryController {
     @PostMapping
     public void createDelivery(@RequestBody DeliveryDto deliveryDto) {
         log.info("Delivery to create: {}.", deliveryDto.toString());
-        deliveryService.create(deliveryMapper.fromDto(deliveryDto));
+        deliveryService.save(deliveryMapper.fromDto(deliveryDto));
     }
 
 
@@ -47,7 +47,7 @@ public class DeliveryController {
     @PutMapping("/{deliveryId}")
     public void updateDelivery(@RequestBody DeliveryDto deliveryDto) {
         log.info("Delivery to update: {}", deliveryDto.toString());
-        deliveryService.update(deliveryMapper.fromDto(deliveryDto));
+        deliveryService.save(deliveryMapper.fromDto(deliveryDto));
     }
 
     @GetMapping("/{deliveryId}")

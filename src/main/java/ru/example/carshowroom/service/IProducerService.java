@@ -6,11 +6,9 @@ import java.util.List;
 
 public interface IProducerService {
 
-    Producer create(Producer producer);
+    Producer save(Producer producer);
 
     void remove(Integer producerId);
-
-    Producer update(Producer producer);
 
     Producer getProducerById(Integer producerId);
 

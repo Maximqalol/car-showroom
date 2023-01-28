@@ -83,10 +83,6 @@ public class Car {
         return features;
     }
 
-    public void setFeature(String features) {
-        this.features = features;
-    }
-
     public int getYear() {
         return year;
     }

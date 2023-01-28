@@ -25,7 +25,7 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public Customer create(Customer customer) {
+    public Customer save(Customer customer) {
         log.debug("Save customer.");
         return customerRepository.save(customer);
     }
@@ -34,19 +34,6 @@ public class CustomerServiceImpl implements ICustomerService {
     public void remove(Integer customerId) {
         log.debug("Delete customer with id = {}.", customerId);
         customerRepository.deleteById(customerId);
-    }
-
-    @Override
-    public Customer update(Customer customer) {
-        log.debug("Find customer by id = {}.", customer.getId());
-        Customer updatingCustomer = customerRepository.findById(customer.getId()).orElseThrow(() -> new EntityNotFoundException("Can't find customer with id = " + customer.getId()));
-        updatingCustomer.setLastName(customer.getLastName());
-        updatingCustomer.setFirstName(customer.getFirstName());
-        updatingCustomer.setMiddleName(customer.getMiddleName());
-        updatingCustomer.setPhone(customer.getPhone());
-        updatingCustomer.setEmail(customer.getEmail());
-        log.debug("Update customer.");
-        return customerRepository.save(updatingCustomer);
     }
 
     @Override

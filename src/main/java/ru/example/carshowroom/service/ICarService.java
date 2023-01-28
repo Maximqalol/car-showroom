@@ -6,11 +6,9 @@ import java.util.List;
 
 public interface ICarService {
 
-    Car create(Car car);
+    Car save(Car car);
 
     Car findCarById(Integer carId);
-
-    Car update(Car car);
 
     void remove(Integer carId);
 

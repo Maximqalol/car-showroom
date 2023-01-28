@@ -35,7 +35,7 @@ public class CustomerController {
     @PostMapping
     public void createCustomer(@RequestBody CustomerDto customerDto) {
         log.info("Customer to create: {}.", customerDto.toString());
-        customerService.create(customerMapper.fromDto(customerDto));
+        customerService.save(customerMapper.fromDto(customerDto));
     }
 
     @DeleteMapping("/{customerId}")
@@ -47,7 +47,7 @@ public class CustomerController {
     @PutMapping("/{customerId}")
     public void updateCustomer(@RequestBody CustomerDto customerDto) {
         log.info("Customer to update: {}.", customerDto.toString());
-        customerService.update(customerMapper.fromDto(customerDto));
+        customerService.save(customerMapper.fromDto(customerDto));
     }
 
     @GetMapping("/{customerId}")
