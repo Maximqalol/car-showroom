@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 public class RequestController {
 
     private final Logger log = LoggerFactory.getLogger(RequestController.class);
-    private RequestMapper requestMapper;
-    private IRequestService requestService;
+    private final RequestMapper requestMapper;
+    private final IRequestService requestService;
 
     @Autowired
     public RequestController(RequestMapper requestMapper, IRequestService requestService) {
@@ -43,7 +43,7 @@ public class RequestController {
         requestService.remove(requestId);
     }
 
-    @PutMapping
+    @PutMapping("/{requestId}")
     public void updateRequest(@RequestBody RequestDto requestDto) {
         log.info("Request to update: {}", requestDto.toString());
         requestService.update(requestMapper.fromDto(requestDto));

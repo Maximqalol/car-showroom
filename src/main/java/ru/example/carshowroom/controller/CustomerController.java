@@ -44,7 +44,7 @@ public class CustomerController {
         customerService.remove(customerId);
     }
 
-    @PutMapping("/{carId}")
+    @PutMapping("/{customerId}")
     public void updateCustomer(@RequestBody CustomerDto customerDto) {
         log.info("Customer to update: {}.", customerDto.toString());
         customerService.update(customerMapper.fromDto(customerDto));

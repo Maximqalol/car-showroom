@@ -44,7 +44,7 @@ public class DeliveryController {
         deliveryService.remove(deliveryId);
     }
 
-    @PutMapping
+    @PutMapping("/{deliveryId}")
     public void updateDelivery(@RequestBody DeliveryDto deliveryDto) {
         log.info("Delivery to update: {}", deliveryDto.toString());
         deliveryService.update(deliveryMapper.fromDto(deliveryDto));

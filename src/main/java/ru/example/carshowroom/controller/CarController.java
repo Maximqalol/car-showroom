@@ -44,7 +44,7 @@ public class CarController {
         carService.remove(carId);
     }
 
-    @PutMapping
+    @PutMapping("/{carId}")
     public void updateCar(@RequestBody CarDto carDto) {
         log.info("Car to update: {}.", carDto.toString());
         carService.update(carMapper.fromDto(carDto));

@@ -43,7 +43,7 @@ public class ProducerController {
         producerService.remove(producerId);
     }
 
-    @PutMapping
+    @PutMapping("/{producerId}")
     public void updateProducer(@RequestBody ProducerDto producerDto) {
         log.info("Producer to update: {}", producerDto);
         producerService.update(producerMapper.fromDto(producerDto));
