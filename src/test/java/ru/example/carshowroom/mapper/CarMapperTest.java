@@ -21,21 +21,24 @@ public class CarMapperTest {
 
 
     @Test
-    public void when_map_car_toDto_then_return_carDto() {
-        Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 7700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
-        CarDto mappedCarDto = carMapper.toDto(car);
-        assertThat(mappedCarDto).isNotNull();
-        assertEquals(car.getProducer().getId(), mappedCarDto.getProducerId());
-        assertThat(mappedCarDto).hasFieldOrPropertyWithValue("brand", "BMW");
+    public void shouldMapCarToCarDto() {
+        Producer producer = new Producer(1, "Some name", "Some address", "Some phone");
+        Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 7700000, 3, producer);
+        CarDto carDto = carMapper.toDto(car);
+        assertNotNull(carDto);
+        assertEquals(carDto.getProducerId(), 1);
+        assertEquals(carDto.getYear(), 2015);
+        assertThat(carDto).hasFieldOrPropertyWithValue("brand", "BMW");
     }
 
     @Test
-    public void when_map_car_fromDto_then_return_car() {
-        CarDto carDto = new CarDto();
-        Car mappedCar = carMapper.fromDto(carDto);
-        assertThat(mappedCar).isNotNull();
-        assertEquals(carDto.getProducerId(), mappedCar.getProducer().getId());
-        assertThat(carDto.getId()).isEqualTo(mappedCar.getId());
+    public void shouldMapCarDtoToCar() {
+        CarDto carDto = new CarDto(2, "BMW", "M5 F90", "some features", 2015, 7700000, 3, 1);
+        Car car = carMapper.fromDto(carDto);
+        assertNotNull(car);
+        assertEquals(car.getProducer().getId(), 1);
+        assertThat(car.getId()).isEqualTo(2);
+        assertThat(car).hasFieldOrPropertyWithValue("model", "M5 F90");
     }
 
 }

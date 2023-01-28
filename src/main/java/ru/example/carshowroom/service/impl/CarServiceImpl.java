@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.example.carshowroom.data.entity.Car;
-import ru.example.carshowroom.data.mapper.CarMapper;
 import ru.example.carshowroom.data.repository.CarRepository;
 import ru.example.carshowroom.service.ICarService;
 
@@ -16,12 +15,10 @@ import java.util.List;
 public class CarServiceImpl implements ICarService {
     private final Logger log = LoggerFactory.getLogger(CarServiceImpl.class);
     private final CarRepository carRepository;
-    private final CarMapper carMapper;
 
     @Autowired
-    public CarServiceImpl(CarRepository carRepository, CarMapper carMapper) {
+    public CarServiceImpl(CarRepository carRepository) {
         this.carRepository = carRepository;
-        this.carMapper = carMapper;
     }
 
     @Override

@@ -1,16 +1,12 @@
 package ru.example.carshowroom.service;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.example.carshowroom.data.dto.CarDto;
 import ru.example.carshowroom.data.entity.Car;
 import ru.example.carshowroom.data.entity.Producer;
-import ru.example.carshowroom.data.mapper.CarMapper;
 import ru.example.carshowroom.data.repository.CarRepository;
 import ru.example.carshowroom.service.impl.CarServiceImpl;
 
@@ -26,76 +22,63 @@ public class CarServiceImplTest {
 
     @InjectMocks
     private CarServiceImpl carService;
+
     @Mock
     private CarRepository carRepository;
 
-    @Mock
-    private CarMapper carMapper;
-
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-    }
-
     @Test
-    public void when_carRepository_save_then_nothing() {
+    public void givenNewCar_whenCreate_thenSaved() {
         Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
-        CarDto carDto = new CarDto(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, 1);
-        when(carMapper.fromDto(carDto)).thenReturn(car);
-        when(carMapper.toDto(car)).thenReturn(carDto);
-        carService.create(carDto);
-        verify(carRepository).save(any(Car.class));
+        carService.create(car);
+        verify(carRepository).save(car);
     }
 
     @Test
-    public void when_carRepository_deleteById_then_nothing() {
+    public void givenCar_whenDelete_thenDeleted() {
         Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
         carService.remove(car.getId());
-        verify(carRepository).deleteById(anyInt());
+        verify(carRepository).deleteById(car.getId());
     }
 
     @Test
-    public void when_carRepository_update_then_nothing() {
-        CarDto carDto = new CarDto(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, 1);
+    public void givenCar_whenUpdate_thenUpdated() {
         Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
-        when(carRepository.findById(carDto.getId())).thenReturn(Optional.of(car));
-        when(carMapper.fromDto(carDto)).thenReturn(car);
-        when(carMapper.toDto(car)).thenReturn(carDto);
-        carService.update(carDto);
-        verify(carRepository).save(any());
+        when(carRepository.findById(car.getId())).thenReturn(Optional.of(car));
+        carService.update(car);
+        verify(carRepository).save(car);
     }
 
     @Test
-    public void when_carRepository_findById_then_return_carDto() {
-        Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
-        CarDto carDto = new CarDto(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, 1);
-        when(carMapper.toDto(car)).thenReturn(carDto);
-        when(carRepository.findById(1337)).thenReturn(Optional.of(car));
-        CarDto carDto1 = carService.findCarById(1337);
-        CarDto carDto2 = carService.findCarById(1338);
-        assertEquals(carDto1.getId(), car.getId());
-        assertThat(carDto2).isNull();
+    public void givenCar_whenFindById_thenCarFound() {
+        Optional<Car> expected = Optional.of(new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone")));
+        when(carRepository.findById(1337)).thenReturn(expected);
+        Car actual = carService.findCarById(1337);
+        assertEquals(expected.get(), actual);
         verify(carRepository, atLeastOnce()).findById(1337);
 
     }
 
     @Test
-    public void when_carRepository_findAll_then_return_carList() {
-        Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
-        when(carRepository.findAll()).thenReturn(List.of(car, car, car));
-        List<CarDto> carList = carService.getAllCars();
-        assertThat(carList).isNotNull();
-        assertEquals(3, carList.size());
+    public void givenListOfCars_whenFindAll_thenAllCarsFound() {
+        Car car1 = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
+        Car car2 = new Car(2, "BMW", "M5 F10", "some features", 2013, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
+        List<Car> expected = List.of(car1, car2);
+        when(carRepository.findAll()).thenReturn(expected);
+        List<Car> actual = carService.getAllCars();
+        assertThat(actual).isNotNull();
+        assertEquals(expected, actual);
         verify(carRepository, times(1)).findAll();
     }
 
     @Test
     public void when_carRepository_findAvailableCars_then_return_carList() {
-        Car car = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 1, new Producer(1, "Some name", "Some address", "Some phone"));
-        when(carRepository.findAvailableCars()).thenReturn(List.of(car, car, car));
-        List<CarDto> carList = carService.getAvailableCars();
-        assertThat(carList).isNotNull();
-        assertEquals(3, carList.size());
+        Car car1 = new Car(1, "BMW", "M5 F90", "some features", 2015, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
+        Car car2 = new Car(2, "BMW", "M5 F10", "some features", 2013, 5700000, 3, new Producer(1, "Some name", "Some address", "Some phone"));
+        List<Car> expected = List.of(car1, car2);
+        when(carRepository.findAvailableCars()).thenReturn(expected);
+        List<Car> actual = carService.getAvailableCars();
+        assertThat(actual).isNotNull();
+        assertEquals(expected, actual);
         verify(carRepository, times(1)).findAvailableCars();
     }
 }

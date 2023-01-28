@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.example.carshowroom.data.entity.Delivery;
-import ru.example.carshowroom.data.mapper.DeliveryMapper;
 import ru.example.carshowroom.data.repository.DeliveryRepository;
 import ru.example.carshowroom.service.IDeliveryService;
 
@@ -16,13 +15,11 @@ import java.util.List;
 public class DeliveryServiceImpl implements IDeliveryService {
 
     private final Logger log = LoggerFactory.getLogger(DeliveryServiceImpl.class);
-    private final DeliveryMapper deliveryMapper;
 
     private final DeliveryRepository deliveryRepository;
 
     @Autowired
-    public DeliveryServiceImpl(DeliveryMapper deliveryMapper, DeliveryRepository deliveryRepository) {
-        this.deliveryMapper = deliveryMapper;
+    public DeliveryServiceImpl(DeliveryRepository deliveryRepository) {
         this.deliveryRepository = deliveryRepository;
     }
 

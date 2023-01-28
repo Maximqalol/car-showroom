@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.example.carshowroom.data.entity.Producer;
-import ru.example.carshowroom.data.mapper.ProducerMapper;
 import ru.example.carshowroom.data.repository.ProducerRepository;
 import ru.example.carshowroom.service.IProducerService;
 
@@ -19,12 +18,10 @@ public class ProducerServiceImpl implements IProducerService {
     private final Logger log = LoggerFactory.getLogger(ProducerServiceImpl.class);
 
     private final ProducerRepository producerRepository;
-    private final ProducerMapper producerMapper;
 
     @Autowired
-    public ProducerServiceImpl(ProducerRepository producerRepository, ProducerMapper producerMapper) {
+    public ProducerServiceImpl(ProducerRepository producerRepository) {
         this.producerRepository = producerRepository;
-        this.producerMapper = producerMapper;
     }
 
     @Override

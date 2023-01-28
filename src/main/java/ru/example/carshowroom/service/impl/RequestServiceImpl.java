@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.example.carshowroom.data.entity.Car;
 import ru.example.carshowroom.data.entity.Request;
-import ru.example.carshowroom.data.mapper.RequestMapper;
 import ru.example.carshowroom.data.repository.CarRepository;
 import ru.example.carshowroom.data.repository.RequestRepository;
 import ru.example.carshowroom.service.IRequestService;
@@ -17,13 +16,11 @@ import java.util.List;
 @Service
 public class RequestServiceImpl implements IRequestService {
     private final Logger log = LoggerFactory.getLogger(RequestServiceImpl.class);
-    private RequestMapper requestMapper;
-    private RequestRepository requestRepository;
-    private CarRepository carRepository;
+    private final RequestRepository requestRepository;
+    private final CarRepository carRepository;
 
     @Autowired
-    public RequestServiceImpl(RequestMapper requestMapper, RequestRepository requestRepository, CarRepository carRepository) {
-        this.requestMapper = requestMapper;
+    public RequestServiceImpl(RequestRepository requestRepository, CarRepository carRepository) {
         this.requestRepository = requestRepository;
         this.carRepository = carRepository;
     }
@@ -33,9 +30,7 @@ public class RequestServiceImpl implements IRequestService {
         log.debug("Find car with id = {}.", request.getCar().getId());
         Car car = carRepository.findById(request.getCar().getId()).orElseThrow(() -> new EntityNotFoundException("Can't find car with id = " + request.getCar().getId()));
         if (car != null && car.getQuantity() > 0) {
-            log.debug("Set car quantity");
             car.setQuantity(car.getQuantity() - 1);
-            log.debug("Save car");
             carRepository.save(car);
         }
         log.debug("Save request.");
@@ -50,7 +45,7 @@ public class RequestServiceImpl implements IRequestService {
 
     @Override
     public Request update(Request request) {
-        log.debug("Finding request with id = {}.", request.getId());
+        log.debug("Find request with id = {}.", request.getId());
         Request updatingRequest = requestRepository.findById(request.getId()).orElseThrow(() -> new EntityNotFoundException("Can't find request with id = " + request.getId()));
         updatingRequest.setId(request.getId());
         updatingRequest.setDate(request.getDate());

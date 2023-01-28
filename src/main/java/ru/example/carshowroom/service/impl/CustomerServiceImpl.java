@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.example.carshowroom.data.entity.Customer;
-import ru.example.carshowroom.data.mapper.CustomerMapper;
 import ru.example.carshowroom.data.repository.CustomerRepository;
 import ru.example.carshowroom.service.ICustomerService;
 
@@ -19,12 +18,10 @@ public class CustomerServiceImpl implements ICustomerService {
     private final Logger log = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
     private final CustomerRepository customerRepository;
-    private final CustomerMapper customerMapper;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper) {
+    public CustomerServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
-        this.customerMapper = customerMapper;
     }
 
     @Override
